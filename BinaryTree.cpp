@@ -147,6 +147,23 @@ void printPreOrder(Node *node)
     printPreOrder(node->right;
 }
 
+void binaryTreetoBST(int *arr, Node *root, int *index_ptr)
+{
+    // Base Case
+    if (root == NULL)
+        return;
+
+    /* first update the left subtree */
+    binaryTreetoBST(arr, root->left, index_ptr);
+
+    /* Now update root's data and increment index */
+    root->data = arr[*index_ptr];
+    (*index_ptr)++;
+
+    /* finally update the right subtree */
+    binaryTreetoBST(arr, root->right, index_ptr);
+}
+
 int main()
 {
     int in[30];
@@ -196,6 +213,19 @@ int main()
             cout << "Zigzag traversal of the constructed tree : \n";
             printReverseZigZag(root);
             cout << "\n";
+            break;
+        case 4:
+            if (converted == 0)
+            {
+                sort(in, in + cnt);
+                binaryTreetoBST(in, root, &i);
+                cout << "Converted to BST\n";
+                converted = 1;
+            }
+            else
+            {
+                cout << "Already converted to BST\n";
+            }
             break;
         case 0:
             cout << "Exited successfully\n";
