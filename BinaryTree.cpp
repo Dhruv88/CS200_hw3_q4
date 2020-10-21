@@ -3,13 +3,10 @@
 #include <stack>
 #include <string>
 #include <algorithm>
+#include "f2.h"
+#include "f3.h"
 using namespace std;
 
-struct Node
-{
-    int data;
-    Node *left, *right;
-};
 Node *newNode(int data)
 {
     Node *node = (Node *)malloc(sizeof(Node));
@@ -144,7 +141,7 @@ void printPreOrder(Node *node)
         return;
     printf("%d ", node->data);
     printPreOrder(node->left);
-    printPreOrder(node->right;
+    printPreOrder(node->right);
 }
 
 void binaryTreetoBST(int *arr, Node *root, int *index_ptr)
@@ -190,7 +187,7 @@ int main()
     //Execute functions according to user choice
     int choice;
     cout << "Action menu\n";
-    cout << "Press 1 for printing the pre-order traversal\nPress 2 for printing the post-order traversal\nPress 3 for printing the zigzag traversal\nPress 4 for converting to binary search tree\nPress 0 to exit\n";
+    cout << "Press 1 for printing the pre-order traversal\nPress 2 for printing the post-order traversal\nPress 3 for printing the zigzag traversal\nPress 4 for converting to binary search tree\nPress 5 for count of leaf nodes\nPress 6 for count of half nodes\nPress 0 to exit\n";
     int converted = 0;
     do
     {
@@ -227,6 +224,12 @@ int main()
                 cout << "Already converted to BST\n";
             }
             break;
+        case 5:
+            cout << "No. of leaf nodes is " << getLeafCount(root);
+            cout <<"\n";
+        case 6:
+            cout << "No. of half nodes is " << halfcount(root);
+            cout << "\n";
         case 0:
             cout << "Exited successfully\n";
             break;
