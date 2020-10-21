@@ -1,8 +1,8 @@
-#include<iostream>
-#include<fstream>
-#include<stack>
-#include<string>
-#include<algorithm>
+#include <iostream>
+#include <fstream>
+#include <stack>
+#include <string>
+#include <algorithm>
 using namespace std;
 
 struct Node
@@ -40,57 +40,85 @@ Node *buildTree(int in[], int n)
     return root;
 }
 
-void printZigZag(struct Node *root)
+int HeightOfTree(struct Node *root)
 {
-    // if null then return
-    if (!root)
+    if (root == NULL)
+        return 0;
+
+    // Compute the height of each subtree
+    int lheight = HeightOfTree(root->left);
+    int rheight = HeightOfTree(root->right);
+
+    // Return the maximum of two
+    return max(lheight + 1, rheight + 1);
+}
+
+// Function to Print nodes from right to left
+void Print_Level_Right_To_Left(struct Node *root, int level)
+{
+    if (root == NULL)
         return;
 
-    // declare two stacks
-    stack<struct Node *> currentlevel;
-    stack<struct Node *> nextlevel;
+    if (level == 1)
+        cout << root->data << " ";
 
-    // push the root
-    currentlevel.push(root);
+    else if (level > 1)
+    {
+        Print_Level_Right_To_Left(root->right, level - 1);
+        Print_Level_Right_To_Left(root->left, level - 1);
+    }
+}
 
-    // check if stack is empty
-    bool lefttoright = true;
-    while (!currentlevel.empty())
+// Function to Print nodes from left to right
+void Print_Level_Left_To_Right(struct Node *root, int level)
+{
+    if (root == NULL)
+        return;
+
+    if (level == 1)
+        cout << root->data << " ";
+
+    else if (level > 1)
+    {
+        Print_Level_Left_To_Right(root->left, level - 1);
+        Print_Level_Left_To_Right(root->right, level - 1);
+    }
+}
+
+// Function to print Reverse zigzag of
+// a Binary tree
+void printReverseZigZag(struct Node *root)
+{
+    // Flag is used to mark the change
+    // in level
+    int flag = 1;
+
+    // Height of tree
+    int height = HeightOfTree(root);
+
+    for (int i = height; i >= 1; i--)
     {
 
-        // pop out of stack
-        struct Node *temp = currentlevel.top();
-        currentlevel.pop();
-
-        // if not null
-        if (temp)
+        // If flag value is one print nodes
+        // from right to left
+        if (flag == 1)
         {
+            Print_Level_Right_To_Left(root, i);
 
-            // print the data in it
-            cout << temp->data << " ";
-
-            // store data according to current
-            // order.
-            if (lefttoright)
-            {
-                if (temp->left)
-                    nextlevel.push(temp->left);
-                if (temp->right)
-                    nextlevel.push(temp->right);
-            }
-            else
-            {
-                if (temp->right)
-                    nextlevel.push(temp->right);
-                if (temp->left)
-                    nextlevel.push(temp->left);
-            }
+            // Mark flag as zero so that next time
+            // tree is traversed from left to right
+            flag = 0;
         }
 
-        if (currentlevel.empty())
+        // If flag is zero print nodes
+        // from left to right
+        else if (flag == 0)
         {
-            lefttoright = !lefttoright;
-            swap(currentlevel, nextlevel);
+            Print_Level_Left_To_Right(root, i);
+
+            // Mark flag as one so that next time
+            // nodes are printed from right to left
+            flag = 1;
         }
     }
 }
@@ -166,7 +194,7 @@ int main()
             break;
         case 3:
             cout << "Zigzag traversal of the constructed tree : \n";
-            printZigZag(root);
+            printReverseZigZag(root);
             cout << "\n";
             break;
         case 0:
